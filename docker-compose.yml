@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    container_name: anime-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: anime_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d anime_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: anime-app
+    restart: unless-stopped
+    ports:
+      - "8099:8099"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/anime_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8099
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
