@@ -23,12 +23,17 @@ docker compose down
 ```text
 http://localhost:8099/api/anime
 ```
+## Swagger UI
+```
+http://localhost:8099/swagger-ui/index.html
+```
 
 ## API Endpoints
 
 ### Anime
 
 - GET `/api/anime` — получить все аниме
+- GET `/api/anime?page=0&size=10` — получить аниме с пагинацией
 - GET `/api/anime/{id}` — получить аниме по ID
 - POST `/api/anime` — создать аниме
 - PUT `/api/anime/{id}` — обновить аниме
