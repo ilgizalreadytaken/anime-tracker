@@ -8,9 +8,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-@Entity
+@Entity // говорит Hibernate: это таблица в БД
 public class Anime {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,11 +31,27 @@ public class Anime {
     private String status;
 
     @JsonIgnore
+    // НЕ отправлять reviews в JSON (чтобы не было бесконечной рекурсии)
     @OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true)
+    /*
+     OneToMany = 1 Anime → много Review
+
+     mappedBy = "anime"
+     → связь управляется полем "anime" в классе Review
+
+     cascade = ALL
+     → если удаляешь Anime → удаляются все Reviews
+
+     orphanRemoval = true
+     → если Review убрали из списка → он удаляется из БД
+    */
     private List<Review> reviews;
 
     public Anime() {
+        // пустой конструктор нужен JPA
     }
+
+    // ================= GETTERS / SETTERS =================
 
     public Long getId() {
         return id;

@@ -5,20 +5,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.anime.tracker.model.Anime;
 import ru.anime.tracker.service.AnimeService;
+import ru.anime.tracker.dto.AnimeTopDto;
 
 import java.util.List;
 
-@RestController
+@RestController // говорит Spring: это REST API контроллер (возвращает JSON)
 @RequestMapping("/api/anime")
 public class AnimeController {
-
     private final AnimeService service;
 
     public AnimeController(AnimeService service) {
         this.service = service;
     }
 
-    // ✅ ПАГИНАЦИЯ
+    // ПОЛУЧИТЬ ВСЕ АНИМЕ (С ПАГИНАЦИЕЙ)
     @GetMapping
     public Page<Anime> getAll(
             @RequestParam(defaultValue = "0") int page,
@@ -29,16 +29,21 @@ public class AnimeController {
 
     @GetMapping("/{id}")
     public Anime getById(@PathVariable Long id) {
+        // берём id из URL и ищем аниме
         return service.getById(id);
     }
 
     @PostMapping
     public Anime create(@Valid @RequestBody Anime anime) {
+        // @RequestBody = JSON → Java объект
+        // @Valid = проверка полей (валидация)
         return service.save(anime);
     }
 
     @PutMapping("/{id}")
-    public Anime update(@PathVariable Long id, @Valid @RequestBody Anime anime) {
+    public Anime update(@PathVariable Long id,
+                        @Valid @RequestBody Anime anime) {
+        // берём id из URL + новые данные из JSON
         return service.update(id, anime);
     }
 
@@ -48,8 +53,8 @@ public class AnimeController {
     }
 
     @GetMapping("/top")
-    public List<Anime> top() {
-        return service.getTopAnime();
+    public List<AnimeTopDto> top() {
+        return service.getTopAnimeWithRating();
     }
 
     @GetMapping("/search")

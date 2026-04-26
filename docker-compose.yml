@@ -7,6 +7,7 @@ services:
       POSTGRES_DB: anime_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--locale=en_US.utf8"
     ports:
       - "5433:5432"
     volumes:
@@ -24,7 +25,8 @@ services:
     ports:
       - "8099:8099"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/anime_db
+      # URL с параметрами кодировки (useUnicode=true&characterEncoding=UTF-8)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/anime_db?useUnicode=true&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update

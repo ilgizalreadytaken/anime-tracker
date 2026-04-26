@@ -22,7 +22,7 @@ public class ReviewService {
         this.animeRepository = animeRepository;
     }
 
-    // ➜ добавить отзыв
+    // добавить отзыв
     public Review addReview(Long animeId, Review review) {
         Anime anime = animeRepository.findById(animeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not found"));
@@ -32,15 +32,15 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    // ➜ список отзывов
+    // список отзывов
     public List<Review> getReviewsByAnimeId(Long animeId) {
         if (!animeRepository.existsById(animeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not found");
         }
-        return reviewRepository.findByAnimeId(animeId);
+        return reviewRepository.findByAnime_Id(animeId);
     }
 
-    // ⭐ средний рейтинг
+    // средний рейтинг
     public Double getAverageRating(Long animeId) {
         if (!animeRepository.existsById(animeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not found");
